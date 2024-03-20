@@ -1,0 +1,20 @@
+Anlg Ch State  Units/Div   Position  Coupling  BW Limit  Invert 
+ Ch 1:    On     10mV/    -12.0002V     DC        Off      On   
+ Ch 2:    On     10mV/     12.0888V     DC        Off      Off  
+
+Anlg Ch Impedance   Probe  
+ Ch 1:    1M Ohm   1.0 : 1 
+ Ch 2:    1M Ohm   1.0 : 1 
+
+Trigger  Mode   Coupling  Noise Rej  HF Reject   Holdoff 
+  Edge  Normal     DC        Off        Off     60.000ns 
+
+Trigger Source   Slope   Level 
+  Edge   Ch 2   Rising  +12.1V 
+
+ Time  Time Ref  Main s/div  Delay 
+Normal  Center    1.000us/    0.0s 
+
+Acquisition Realtime  Vectors  Inf Persist 
+   Normal      On        On        Off     
+
