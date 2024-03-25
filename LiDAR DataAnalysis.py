@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 
-data = pd.read_csv("scope_2_e2.csv")
+data = pd.read_csv("../TPOP/TPOP-donnees/pythonProject/scope_2_e2.csv")
 time = [float(x) for count,x in enumerate(data['x-axis']) if count != 0]
 volts_1 = [abs(float(x))+0.09 for count,x in enumerate(data['1']) if count != 0]
 volts_2 = [float(x) for count,x in enumerate(data['2']) if count != 0]
