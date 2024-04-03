@@ -1,7 +1,7 @@
 Dépôt Github de l'équipe comprenant
 - Alexandre Shea
 - Clément Poulin
-\\
+  
 
 pour le cours de Travaux Pratiques en Optique Photonique à l'Université Laval.
 
