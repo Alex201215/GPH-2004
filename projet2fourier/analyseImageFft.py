@@ -65,6 +65,11 @@ class ImageCamera:
         plt.imshow(self.image_originale, cmap='gray')
 
     def filtre_od(self, force_du_od) -> None:
+        # Ici l'idée est de coder un filtre qui permet de damp certaines amplitudes
+        # Il y aurait donc un certain threshold pour lequel on veut baisser l'intensité
+        # Mettons de 2. On sait que la source laser est forte au centre. Il est donc 
+        # Il suffira donc de voir où est la fréquence la plus présente et appliquer un
+        # masque circulaire sur cette zone.
         pass
 
     def filtre_passe_haut(self, rayon_du_filtre) -> None:
@@ -157,7 +162,7 @@ class ImageCamera:
             cv2.imshow("FILTERED2 DFT/IFT ROUND TRIP", img_filtered2)
             cv2.waitKey(0)
   
-    def masque(self, threshold: float) -> None:
+    def masque_damp(self, threshold: float) -> None:
         pass
     
     def revert_changes(self):
@@ -166,7 +171,7 @@ class ImageCamera:
 
 objet1 = ImageCamera("..\TPOP\projet2fourier\heaviside.jpg")
 objet1_fft = objet1.calcul_fft()
-objet1.filtre_passe_bas(15)
+#objet1.filtre_passe_bas(15)
 #objet1.filtre_passe_haut(5)
 #objet1.afficher_fft()
 
