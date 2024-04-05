@@ -72,7 +72,7 @@ def eval_model(model: t.nn.Module,
     loss, acc = 0, 0
     model.eval()
     with t.inference_mode():
-        for x, y in tqdm(data_loader):
+        for x, y in data_loader:
 
             # move data to device
             x, y = x.to(device), y.to(device)
@@ -174,4 +174,36 @@ def test_step(model: t.nn.Module,
         test_acc /= len(data_loader)
 
     # print out what's happening
-    print(f"\nTest loss: {test_loss:.5f} | Test acc: {test_acc:.3f}%\n")
+    print(f"Test loss: {test_loss:.5f} | Test acc: {test_acc:.3f}%\n")
+
+
+def make_predictions(model: t.nn.Module,
+                     data: list,
+                     device: t.device):
+    """
+    Computes prediction of a model for an input data
+    """
+    pred_probs = []
+
+    # send model to device
+    model.to(device)
+
+    # set model to evaluating mode
+    model.eval()
+    with t.inference_mode():
+        for sample in data:
+
+            # prepare the sample
+            sample = t.unsqueeze(sample, dim=0).to(device)
+
+            # forward pass (model outputs raw logits)
+            pred_logits = model(sample)
+
+            # get prediction probability
+            pred_prob = t.softmax(pred_logits.squeeze(), dim=0)
+
+            # send pred_prod to cpu
+            pred_probs.append(pred_prob.cpu())
+
+    # stack pred_probs to turn list into a tensor
+    return t.stack(pred_probs)
