@@ -6,6 +6,7 @@ from skimage.io import imread, imshow
 from skimage.color import rgb2hsv, rgb2gray, rgb2yuv
 from skimage import color, exposure, transform
 from skimage.exposure import equalize_hist
+from PIL import Image
 
 
 class ImageCamera:
@@ -46,12 +47,15 @@ class ImageCamera:
 
     def resize_image(self, taille_voulue) -> None:
         # Fonction qui gère la compression d'image
-        pass
+        image = Image.open(self.path_fichier)
+        new_image = image.resize(taille_voulue)
+        new_image.save('imageResized.jpg')
 
     def afficher_fft(self, num=None):
         # Affiche la transformé de fourier de l'image objet
-        #plt.figure(num=None, figsize=(8, 6), dpi=80)
-        cv2.imshow("Titir", np.log(abs(self.image_fft)))
+        plt.figure(num=None, figsize=(8, 6), dpi=80)
+        plt.imshow((abs(self.image_fft)), cmap='gray')
+        #cv2.imshow("Titir", np.log(abs(self.image_fft)))
 
     def afficher_ifft(self, num=None) -> None:
         # Affiche la transformé de fourier inverse du array fft
@@ -170,7 +174,9 @@ class ImageCamera:
 
 
 objet1 = ImageCamera("..\TPOP\projet2fourier\heaviside.jpg")
-objet1_fft = objet1.calcul_fft()
+objet1.resize_image((28,28))
+#objet1_fft = objet1.calcul_fft()
+
 #objet1.filtre_passe_bas(15)
 #objet1.filtre_passe_haut(5)
 #objet1.afficher_fft()
