@@ -137,14 +137,3 @@ for filename in os.listdir(dir_path):
 
 end_time = timer()
 print(end_time - start_time)
-
-
-
-
-
-
-
-
-
-
-
