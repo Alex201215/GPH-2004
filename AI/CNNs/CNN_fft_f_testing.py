@@ -35,13 +35,26 @@ data_transform = transforms.Compose([
     transforms.ConvertImageDtype(t.float32)
 ])
 
-custom_image_path = r"C:\Clément MSI\Code\Python\PyTorch\Learn PyTorch\TPOP - Projet 2\ImageFFTGrid.png"
+custom_image_path = r"C:\Clément MSI\Code\Python\PyTorch\Learn PyTorch\TPOP - Projet 2\tpop_donnees_fourier\nouvelles_donnees\lines\lignes_verticales.png"
 custom_image_float32_resized = data_transform(torchvision.io.read_image(custom_image_path))
 
-plt.imshow(custom_image_float32_resized.permute(1, 2, 0), cmap="gray")
-plt.show()
+# plt.imshow(custom_image_float32_resized.permute(1, 2, 0), cmap="gray")
+# plt.show()
 
 custom_image = (custom_image_float32_resized.to(device)).unsqueeze(0)
+
+
+""" LOAD CUSTOM TESTING DATA """
+
+custom_dir = r"C:\Clément MSI\Code\Python\PyTorch\Learn PyTorch\TPOP - Projet 2\tpop_donnees_fourier\nouvelles_donnees"
+
+data_transform = transforms.Compose([
+    transforms.Resize(size=(64, 64)),
+    transforms.ToTensor()
+])
+
+custom_data = datasets.ImageFolder(root=custom_dir,
+                                   transform=data_transform)
 class_names = ['full grid', 'lines']
 
 
@@ -79,4 +92,51 @@ with t.inference_mode():
 
 custom_probs = t.softmax(custom_preds, dim=1)
 custom_labels = t.argmax(custom_probs, dim=1).cpu()
-print(f"\nCustom probabilities: {custom_probs}\nPrediction: {class_names[custom_labels]}")
+print(f"\nSingle image probabilities: {custom_probs}\nPrediction: {class_names[custom_labels]}")
+
+
+""" MAKES PREDICTIONS """
+
+test_samples = []
+test_labels = []
+
+for sample, label in random.sample(list(custom_data), k=9):
+    test_samples.append(sample)
+    test_labels.append(label)
+
+pred_probs = make_predictions(model=loaded_CNN_fft_f,
+                              data=test_samples,
+                              device=device)
+pred_classes = pred_probs.argmax(dim=1)
+
+
+""" VISUALIZE RESULTS """
+
+# plot predictions
+plt.figure(figsize=(16, 16))
+nrows = 3
+ncols = 3
+for i, sample in enumerate(test_samples):
+
+    # create subplot
+    plt.subplot(nrows, ncols, i + 1)
+
+    # plot the target image
+    plt.imshow((sample.squeeze()).permute(1, 2, 0), cmap="gray")
+
+    # find the prediction label
+    pred_label = class_names[pred_classes[i]]
+
+    # get the truth label
+    truth_label = class_names[test_labels[i]]
+
+    # create title
+    title_text = f"Pred: {pred_label} | Truth: {truth_label}"
+
+    # check for equality between pred and trutch
+    if pred_label == truth_label:
+        plt.title(title_text, fontsize=10, c="g")
+    else:
+        plt.title(title_text, fontsize=10, c="r")
+    plt.axis(False)
+plt.show()
