@@ -171,7 +171,51 @@ if __name__ == "__main__":
                                                 device=str(next(CNN_fft.parameters()).device))
 
 
+    """ MAKE PREDICTIONS """
+
+    test_samples = []
+    test_labels = []
+
+    for sample, label in random.sample(list(test_data), k=16):
+        test_samples.append(sample)
+        test_labels.append(label)
+
+    pred_probs = make_predictions(model=CNN_fft,
+                                  data=test_samples,
+                                  device=device)
+    pred_classes = pred_probs.argmax(dim=1)
+
+
     """ VISUALIZE RESULTS """
+
+    # plot predictions
+    plt.figure(figsize=(16, 16))
+    nrows = 4
+    ncols = 4
+    for i, sample in enumerate(test_samples):
+
+        # create subplot
+        plt.subplot(nrows, ncols, i + 1)
+
+        # plot the target image
+        plt.imshow((sample.squeeze()).permute(1, 2, 0), cmap="gray")
+
+        # find the prediction label
+        pred_label = class_names[pred_classes[i]]
+
+        # get the truth label
+        truth_label = class_names[test_labels[i]]
+
+        # create title
+        title_text = f"Pred: {pred_label} | Truth: {truth_label}"
+
+        # check for equality between pred and trutch
+        if pred_label == truth_label:
+            plt.title(title_text, fontsize=10, c="g")
+        else:
+            plt.title(title_text, fontsize=10, c="r")
+
+        plt.axis(False)
 
     plot_loss_curves(CNN_fft_results)
 
