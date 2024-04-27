@@ -42,7 +42,7 @@ test_dir = r"C:\Clément MSI\Code\Python\PyTorch\Learn PyTorch\TPOP - Projet 2\G
 """ CREATE TRAINING AND TESTING DATASETS """
 
 data_transform = transforms.Compose([
-    transforms.Resize(size=(64, 64)),
+    transforms.Resize(size=(32, 32)),
     transforms.ToTensor()
 ])
 
@@ -123,24 +123,26 @@ class CNN_FFT(nn.Module):
 
 
     def forward(self, x: t.Tensor):
-        return self.classifier(self.conv_block_2(self.conv_block_1(x)))
+        return self.classifier(self.conv_block_1(x))  # self.conv_block_2(self.conv_block_1(x)))
 
 
 CNN_fft = CNN_FFT(input_shape=3,                               # input_shapes is the number of color channels [1]
-                  hidden_units=10,                             # number of neurons
+                  hidden_units=3,                              # number of neurons
                   output_shape=len(class_names)).to(device)    # number of classes in dataset
 
 
 """ SUMMARIZE MODEL """
 
-# summary(CNN_fft, input_size=[1, 3, 64, 64])
+print()
+summary(CNN_fft, input_size=[1, 3, 32, 32])
+print()
 
 
 """ SETUP LOSS FUNCTION AND OPTIMIZER """
 
 loss_fn = nn.CrossEntropyLoss()
 optimizer = t.optim.Adam(params=CNN_fft.parameters(),
-                         lr=0.001)
+                         lr=0.005)
 
 
 """ PROTECT MAIN SCRIPT """
@@ -151,7 +153,7 @@ if __name__ == "__main__":
 
     """ TRAINING AND TESTING LOOP """
 
-    EPOCHS = 6
+    EPOCHS = 4
     for epoch in range(EPOCHS):
         print(f"Epoch: {epoch}\n------")
 
@@ -207,13 +209,13 @@ if __name__ == "__main__":
         truth_label = class_names[test_labels[i]]
 
         # create title
-        title_text = f"Pred: {pred_label} | Truth: {truth_label}"
+        title_text = f"Pred: {pred_label}\nTruth: {truth_label}"
 
         # check for equality between pred and trutch
         if pred_label == truth_label:
-            plt.title(title_text, fontsize=10, c="g")
+            plt.title(title_text, fontsize=12, c="g")
         else:
-            plt.title(title_text, fontsize=10, c="r")
+            plt.title(title_text, fontsize=12, c="r")
 
         plt.axis(False)
 
@@ -228,7 +230,7 @@ MODEL_PATH.mkdir(parents=True,
                  exist_ok=True)
 
 # create model save
-MODEL_NAME = "CNN_fft_useless.pth"
+MODEL_NAME = "CNN_fft.pth"
 MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME
 
 # save the model state dict

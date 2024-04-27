@@ -31,7 +31,7 @@ device = "cuda" if t.cuda.is_available() else "cpu"
 """ LOAD CUSTOM IMAGE """
 
 data_transform = transforms.Compose([
-    transforms.Resize(size=(64, 64), antialias=True),
+    transforms.Resize(size=(32, 32), antialias=True),
     transforms.ConvertImageDtype(t.float32)
 ])
 
@@ -49,7 +49,7 @@ custom_image = (custom_image_float32_resized.to(device)).unsqueeze(0)
 custom_dir = r"C:\Clément MSI\Code\Python\PyTorch\Learn PyTorch\TPOP - Projet 2\tpop_donnees_fourier\nouvelles_donnees"
 
 data_transform = transforms.Compose([
-    transforms.Resize(size=(64, 64)),
+    transforms.Resize(size=(32, 32)),
     transforms.ToTensor()
 ])
 
@@ -67,7 +67,7 @@ MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME
 
 # instantiate a new instance of our model class
 loaded_CNN_fft_f = CNN_FFT(input_shape=3,
-                           hidden_units=10,
+                           hidden_units=3,
                            output_shape=2).to(device)
 
 # Load the saved state_dict() of LinearRegressionModel_1 (this will update the new instance with updated parameters)
@@ -81,7 +81,7 @@ loaded_CNN_fft_f.to(device)
 
 """ SUMMARIZE MODEL """
 
-# summary(loaded_CNN_fft_f, input_size=[1, 3, 64, 64])
+# summary(loaded_CNN_fft_f, input_size=[1, 3, 32, 32])
 
 
 """ TEST 1 IMAGE """
@@ -135,8 +135,8 @@ for i, sample in enumerate(test_samples):
 
     # check for equality between pred and trutch
     if pred_label == truth_label:
-        plt.title(title_text, fontsize=10, c="g")
+        plt.title(title_text, fontsize=18, c="g")
     else:
-        plt.title(title_text, fontsize=10, c="r")
+        plt.title(title_text, fontsize=18, c="r")
     plt.axis(False)
 plt.show()
